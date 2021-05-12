@@ -14,11 +14,12 @@ For more information on how to this works with other frontends/backends, head ov
 
 The code has been tested with Java 13 and Apache Maven 3.6.1, though should work with a minimum of Java 8.
 
-To start the server in [dev mode](https://openliberty.io/docs/latest/development-mode.html), run: 
+To clone, build, and start the server in [dev mode](https://openliberty.io/docs/latest/development-mode.html), run: 
 
 ```
 git clone https://github.com/JCass149/openliberty-microprofile-realworld-example-app.git
 cd openliberty-microprofile-realworld-example-app
+mvn clean install
 mvn liberty:dev
 ```
 
