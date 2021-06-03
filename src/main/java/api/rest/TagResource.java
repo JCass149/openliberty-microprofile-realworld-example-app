@@ -1,6 +1,7 @@
 package api.rest;
 
-import java.util.List;
+import api.dao.TagDAO;
+import api.model.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -13,9 +14,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import api.dao.TagDAO;
-import api.model.Tag;
+import java.util.List;
 
 /**
  * A resource for processing requests related to Tags
@@ -25,25 +24,25 @@ import api.model.Tag;
 @Produces(MediaType.APPLICATION_JSON)
 public class TagResource {
 
-	@Inject
-	private TagDAO tagDAO;
+    @Inject
+    private TagDAO tagDAO;
 
-	@GET
-	@Transactional
-	public Response getTags() {
+    @GET
+    @Transactional
+    public Response getTags() {
 
-		List<Tag> allTags = tagDAO.readAllTags();
+        List<Tag> allTags = tagDAO.readAllTags();
 
-		JsonObjectBuilder wrapper = Json.createObjectBuilder();
-		JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+        JsonObjectBuilder wrapper = Json.createObjectBuilder();
+        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 
-		allTags.forEach(tag -> {
-			arrayBuilder.add(tag.getTag());
-		});
+        allTags.forEach(tag -> {
+            arrayBuilder.add(tag.getTag());
+        });
 
-		wrapper.add("tags", arrayBuilder.build());
+        wrapper.add("tags", arrayBuilder.build());
 
-		return Response.ok(wrapper.build()).build();
-	}
+        return Response.ok(wrapper.build()).build();
+    }
 
 }

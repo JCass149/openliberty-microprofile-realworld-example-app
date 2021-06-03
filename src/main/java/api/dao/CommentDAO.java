@@ -1,12 +1,11 @@
 package api.dao;
 
-import java.util.List;
+import api.model.Comment;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import api.model.Comment;
+import java.util.List;
 
 @RequestScoped
 public class CommentDAO {
@@ -33,5 +32,5 @@ public class CommentDAO {
     public List<Comment> readAllComments() {
         return em.createNamedQuery("Comment.findAll", Comment.class).getResultList();
     }
-    
+
 }

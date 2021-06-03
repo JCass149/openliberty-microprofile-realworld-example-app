@@ -1,12 +1,11 @@
 package api.dao;
 
-import java.util.List;
+import api.model.Profile;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import api.model.Profile;
+import java.util.List;
 
 @RequestScoped
 public class ProfileDAO {
@@ -33,9 +32,9 @@ public class ProfileDAO {
     public List<Profile> readAllProfiles() {
         return em.createNamedQuery("Profile.findAll", Profile.class).getResultList();
     }
-    
+
     public Profile findProfileByUsername(String username) {
         return em.createNamedQuery("Profile.findProfileByUsername", Profile.class)
-            .setParameter("username", username).getSingleResult();
+                .setParameter("username", username).getSingleResult();
     }
 }
