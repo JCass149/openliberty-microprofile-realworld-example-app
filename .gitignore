@@ -10,6 +10,7 @@
 .classpath
 *.launch
 .settings/
+realworld-example-app.iml
 
 
 #System Files

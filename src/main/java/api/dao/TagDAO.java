@@ -1,12 +1,11 @@
 package api.dao;
 
-import java.util.List;
+import api.model.Tag;
 
 import javax.enterprise.context.RequestScoped;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import api.model.Tag;
+import java.util.List;
 
 @RequestScoped
 public class TagDAO {

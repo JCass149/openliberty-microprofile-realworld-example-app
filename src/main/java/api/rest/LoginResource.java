@@ -1,13 +1,7 @@
 package api.rest;
 
-import static api.utils.BuildReturnObject.buildErrorObject;
-import static api.utils.BuildReturnObject.buildUserObject;
-import static api.utils.BuildReturnObject.validateRequiredFields;
-import static api.utils.GenerateJWT.buildJwt;
-
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import api.dao.ProfileDAO;
+import api.model.Profile;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -19,9 +13,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import api.dao.ProfileDAO;
-import api.model.Profile;
+import static api.utils.BuildReturnObject.*;
+import static api.utils.GenerateJWT.buildJwt;
 
 /**
  * A resource for processing Authentication and Registration requests.
@@ -35,9 +32,8 @@ public class LoginResource {
     private ProfileDAO profileDAO;
 
     /**
-     * 
      * Logs in an existing user.
-     * 
+     * <p>
      * Requires: email, password
      */
     @POST
@@ -50,24 +46,24 @@ public class LoginResource {
 
         String email = userObject.getString("email", null);
         String password = userObject.getString("password", null);
-        
+
         Map<String, Object> fields = new HashMap<>();
         fields.put("email", email);
         fields.put("password", password);
         JsonObject invalidFields = validateRequiredFields(fields);
-        if(invalidFields!=null) {
-        	return Response.status(422).entity(invalidFields).build();
+        if (invalidFields != null) {
+            return Response.status(422).entity(invalidFields).build();
         }
 
         Profile thisProfile = profileDAO.readProfile(email);
-        
-        if (thisProfile==null) {
-			return Response.status(422).entity(buildErrorObject("Invalid email")).build();
+
+        if (thisProfile == null) {
+            return Response.status(422).entity(buildErrorObject("Invalid email")).build();
         }
         if (!thisProfile.getPassword().equals(password)) {
-        	return Response.status(422).entity(buildErrorObject("Incorrect password")).build();
+            return Response.status(422).entity(buildErrorObject("Incorrect password")).build();
         }
-        
+
         String token;
         try {
             token = buildJwt(thisProfile.getUsername(), thisProfile.getEmail());
@@ -76,13 +72,13 @@ public class LoginResource {
         }
 
         JsonObject thisUser = buildUserObject(thisProfile, token);
-        
+
         return Response.ok(thisUser).build();
     }
 
     /**
      * Creates a new user from the submitted data by the user.
-     * 
+     * <p>
      * Requires: username, email, password
      */
     @POST
@@ -96,20 +92,20 @@ public class LoginResource {
         String email = userObject.getString("email", null);
         String username = userObject.getString("username", null);
         String password = userObject.getString("password", null);
-        
+
         Map<String, Object> fields = new HashMap<>();
         fields.put("email", email);
         fields.put("username", username);
         fields.put("password", password);
         JsonObject invalidFields = validateRequiredFields(fields);
-        if(invalidFields!=null) {
-        	return Response.status(422).entity(invalidFields).build();
+        if (invalidFields != null) {
+            return Response.status(422).entity(invalidFields).build();
         }
 
         Profile newProfile = new Profile(email, username, password);
 
         profileDAO.createProfile(newProfile);
-        
+
         String token = "";
         try {
             token = buildJwt(newProfile.getUsername(), newProfile.getEmail());
